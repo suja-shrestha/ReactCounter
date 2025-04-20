@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
+
 function App() {
   const [count, setCount] = useState(0);
   const [start, setStart] = useState(false);
@@ -22,12 +23,19 @@ function App() {
 
   return (
     <>
-      <h1>Counter</h1>
-      <p>{count}</p>
-      <button onClick={() => setStart(true)}>Start</button>
-      <button onClick={() => setStart(false)}>Stop</button>
-      <button onClick={()=> setCount(0)}>Reset</button>
+      <div className="container">
+        <div className="counter_box">
+          <h1>Counter</h1>
+          <p>{count}</p>
+          <div className='button_flex'>
+            <button onClick={() => setStart(true)}>Start</button>
+            <button onClick={() => setStart(false)}>Stop</button>
+            <button onClick={() => setCount(0)}>Reset</button>
+          </div>
+        </div>
+      </div>
     </>
+
   );
 }
 
