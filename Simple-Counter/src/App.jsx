@@ -1,42 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [point, setPoint] = useState(0);
+  const [ticks, setTicks] = useState(0);       // every 0.1s tick
   const [start, setStart] = useState(false);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
-    let pointTimer;
-
     if (start) {
-      pointTimer = setInterval(() => {
-        setPoint(prev => {
-          if (prev === 9) {
-            setCount(c => c + 1); // increase count
-            return 0; // reset point
-          } else {
-            return prev + 1;
-          }
-        });
-      }, 100); // every 0.1 second
+      intervalRef.current = setInterval(() => {
+        setTicks(t => t + 1); // tick every 0.1 second
+      }, 100);
+    } else {
+      clearInterval(intervalRef.current);
     }
 
-    return () => clearInterval(pointTimer);
+    return () => clearInterval(intervalRef.current);
   }, [start]);
 
   const handleReset = () => {
     setStart(false);
-    setCount(0);
-    setPoint(0);
+    setTicks(0);
+    clearInterval(intervalRef.current);
   };
+
+  // Derive count and point
+  const count = Math.floor(ticks / 10); // seconds
+  const point = ticks % 10;// tenths of a second
 
   return (
     <div className="container">
       <div className="counter_box">
         <h1>Counter App</h1>
         <p>{count}.{point}</p>
-        <div className='button_flex'>
+        <div className="button_flex">
           <button onClick={() => setStart(true)}>Start</button>
           <button onClick={() => setStart(false)}>Stop</button>
           <button onClick={handleReset}>Reset</button>
