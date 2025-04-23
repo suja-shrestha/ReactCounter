@@ -1,41 +1,48 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
-
 function App() {
   const [count, setCount] = useState(0);
+  const [point, setPoint] = useState(0);
   const [start, setStart] = useState(false);
 
   useEffect(() => {
-    let timer;
+    let pointTimer;
 
     if (start) {
-      timer = setInterval(() => {
-        setCount((prevCount) => prevCount + 1);
-      }, 1000);
-    } else {
-      clearInterval(timer); // Stop the timer when start is false
+      pointTimer = setInterval(() => {
+        setPoint(prev => {
+          if (prev === 9) {
+            setCount(c => c + 1); // increase count
+            return 0; // reset point
+          } else {
+            return prev + 1;
+          }
+        });
+      }, 100); // every 0.1 second
     }
 
-    // Cleanup the interval when the component unmounts or `start` changes
-    return () => clearInterval(timer);
-  }, [start]); // Re-run the effect when `start` changes
+    return () => clearInterval(pointTimer);
+  }, [start]);
+
+  const handleReset = () => {
+    setStart(false);
+    setCount(0);
+    setPoint(0);
+  };
 
   return (
-    <>
-      <div className="container">
-        <div className="counter_box">
-          <h1>Counter App</h1>
-          <p>{count}</p>
-          <div className='button_flex'>
-            <button onClick={() => setStart(true)}>Start</button>
-            <button onClick={() => setStart(false)}>Stop</button>
-            <button onClick={() => setCount(0)}>Reset</button>
-          </div>
+    <div className="container">
+      <div className="counter_box">
+        <h1>Counter App</h1>
+        <p>{count}.{point}</p>
+        <div className='button_flex'>
+          <button onClick={() => setStart(true)}>Start</button>
+          <button onClick={() => setStart(false)}>Stop</button>
+          <button onClick={handleReset}>Reset</button>
         </div>
       </div>
-    </>
-
+    </div>
   );
 }
 
