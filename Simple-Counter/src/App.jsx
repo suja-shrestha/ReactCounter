@@ -25,7 +25,7 @@ function App() {
     <>
       <div className="container">
         <div className="counter_box">
-          <h1>Counter</h1>
+          <h1>Counter App</h1>
           <p>{count}</p>
           <div className='button_flex'>
             <button onClick={() => setStart(true)}>Start</button>
